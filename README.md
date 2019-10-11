@@ -1,2 +1,7 @@
 # lazy-fellows
-AKA haunt-budz
+
+Run 
+
+'npm install'
+
+'npm run dev'
