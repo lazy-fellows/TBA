@@ -3,13 +3,11 @@ import express = require('express');
 import request = require('request'); // "Request" library
 import cors = require('cors');
 import cookieParser = require('cookie-parser');
-
+import querystring = require('querystring');
 
 var app = express();
 
 app.use(express.static(__dirname + '/public')).use(cors()).use(cookieParser());
-
-var querystring = require('querystring');
 
 var client_id = '4a41cf5e745842bcbf538efe856ec067'; // Your client id
 var client_secret = '58f5fb6bc74c40f7ba598fa9f2b22dcb'; // Your secret
@@ -17,6 +15,11 @@ var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
 
+/**
+ * Generates a random string containing numbers and letters
+ * @param  {number} length The length of the string
+ * @return {string} The generated string
+ */
 var generateRandomString = function(length) {
     var text = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -28,9 +31,9 @@ var generateRandomString = function(length) {
 };
 
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+// app.get('/', function (req, res) {
+//   res.sendfile('./public/index.html');
+// });
 
 app.get('/login', function(req, res) {
 
@@ -107,6 +110,6 @@ app.get('/callback', function (req, res) {
     }
 });
 
-app.listen(3000, function() {
+app.listen(3000, () => {
     console.log(colors.green(`App listening on port 3000!`));
 });
