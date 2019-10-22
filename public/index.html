@@ -28,6 +28,9 @@
         <div id="oauth">
         </div>
         <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+        <div id="playlists">
+            <a href="/playlists.html" class="btn btn-primary">Get Your Playlists</button>
+        </div>
       </div>
     </div>
 
@@ -86,6 +89,9 @@
         var access_token = params.access_token,
             refresh_token = params.refresh_token,
             error = params.error;
+            
+        sessionStorage.setItem("accessToken", params.access_token);
+
         if (error) {
           alert('There was an error during the authentication');
         } else {

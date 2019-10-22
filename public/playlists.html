@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Your Playlists</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style type="text/css">
+      #login, #loggedin {
+        display: none;
+      }
+      .text-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 500px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <h1>Your Playlists</h1>
+      <div id="playlist1">
+      </div>
+      <div id="playlist2">
+        </div>
+    </div>
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+      (function() {
+
+        // var playlistSource = document.getElementById('user-playlist-template').innerHTML,
+        //     playlistTemplate = Handlebars.compile(playlistSource),
+        //     playlistPlaceholder = document.getElementById('playlist');
+        
+        $.ajax({
+          url: 'https://api.spotify.com/v1/me/playlists?limit=50',
+          headers: {
+            'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
+          },
+          success: function(response) {
+            // alert("Viewing Your Playlists");
+            // var myJSON = JSON.stringify(response);
+            // document.getElementById("playlist2").innerHTML = myJSON;
+
+            var x, txt = "";
+            myObj = response;
+
+            txt += ""
+            for (x in myObj.items) {
+              txt += "<img src=\"" + myObj.items[x].images[0].url + "\"width=\"200\" height=\"200\">" + "<h3>" + myObj.items[x].name + "</h3>";
+              txt += "<p class=\"text-indent: 40px\">" + "Spotify ID: " + myObj.items[x].id + "</p>"
+            }
+            txt += ""
+            
+            document.getElementById("playlist1").innerHTML = txt;
+            // playlistPlaceholder.innerHTML = playlistTemplate(response);
+          }
+        });
+          
+      })();
+    </script>
+  </body>
+</html>
