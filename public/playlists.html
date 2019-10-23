@@ -35,32 +35,48 @@
         // var playlistSource = document.getElementById('user-playlist-template').innerHTML,
         //     playlistTemplate = Handlebars.compile(playlistSource),
         //     playlistPlaceholder = document.getElementById('playlist');
-        
-        $.ajax({
-          url: 'https://api.spotify.com/v1/me/playlists?limit=50',
-          headers: {
-            'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
-          },
-          success: function(response) {
-            // alert("Viewing Your Playlists");
-            // var myJSON = JSON.stringify(response);
-            // document.getElementById("playlist2").innerHTML = myJSON;
 
-            var x, txt = "";
-            myObj = response;
+        var nextURL = 'https://api.spotify.com/v1/me/playlists?limit=50';
+        var runNext = true;
+        var txt = "";
+        var myObj;
 
-            txt += ""
-            for (x in myObj.items) {
-              txt += "<img src=\"" + myObj.items[x].images[0].url + "\"width=\"200\" height=\"200\">" + "<h3>" + myObj.items[x].name + "</h3>";
-              txt += "<p class=\"text-indent: 40px\">" + "Spotify ID: " + myObj.items[x].id + "</p>"
-            }
-            txt += ""
-            
-            document.getElementById("playlist1").innerHTML = txt;
-            // playlistPlaceholder.innerHTML = playlistTemplate(response);
+        function getAllPlaylists() {
+
+          function getNextPlaylist() {
+            $.ajax({
+              url: nextURL,
+              async: true,
+              headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
+              },
+              success: function(response) {
+                // alert("Viewing Your Playlists");
+                // var myJSON = JSON.stringify(response);
+                // document.getElementById("playlist2").innerHTML = myJSON;
+
+                myObj = response;
+
+                for (x in myObj.items) {
+                  txt += "<img src=\"" + myObj.items[x].images[0].url + "\"width=\"200\" height=\"200\">" + "<h3>" + myObj.items[x].name + "</h3>";
+                  txt += "<p class=\"text-indent: 40px\">" + "Spotify ID: " + myObj.items[x].id + "</p>"
+                }
+                
+                // playlistPlaceholder.innerHTML = playlistTemplate(response);
+              },
+              complete: function(response) {
+                if (!(myObj.next === null || myObj.next === undefined)) {
+                  getNextPlaylist();
+                }
+                else {
+                  document.getElementById("playlist1").innerHTML = txt;
+                }
+              }
+            });
           }
-        });
-          
+            getNextPlaylist();
+        }
+        getAllPlaylists();
       })();
     </script>
   </body>
